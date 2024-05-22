@@ -1,9 +1,5 @@
-import { FC } from "react";
-import {
-  GameReducerState,
-  Instruction,
-  ReducerAction,
-} from "../shared/interfaces";
+import { FC, useState } from "react";
+import { Instruction, ReducerAction } from "../shared/interfaces";
 import GridContainer from "../components/containers/GridContainer";
 import KeyboardInstructions from "../components/shared/KeyboardInstructions";
 import styled from "styled-components";
@@ -11,7 +7,6 @@ import BaseButton from "../components/buttons/BaseButton";
 import { Actions } from "../shared/reducerActions";
 
 interface Props {
-  state: GameReducerState;
   dispatch: React.Dispatch<ReducerAction>;
 }
 
@@ -57,7 +52,10 @@ const options = [
   { label: "Hard", value: "hard" },
 ];
 
-const WelcomeScreen: FC<Props> = ({ state, dispatch }) => {
+const WelcomeScreen: FC<Props> = ({ dispatch }) => {
+  const [username, setUsername] = useState<string>("");
+  const [difficulty, setDifficulty] = useState<string>("");
+
   const renderDifficultyBtns = (): JSX.Element[] => {
     return options.map(({ label, value }, index) => {
       return (
@@ -65,13 +63,8 @@ const WelcomeScreen: FC<Props> = ({ state, dispatch }) => {
           key={`${value}_${index}`}
           text={label}
           keyboardKey={label.charAt(0)}
-          isSelected={state.difficulty === value}
-          onClick={() =>
-            dispatch({
-              type: Actions.UPDATE_DIFFICULTY,
-              value,
-            })
-          }
+          isSelected={difficulty === value}
+          onClick={() => setDifficulty(value)}
         />
       );
     });
@@ -81,13 +74,8 @@ const WelcomeScreen: FC<Props> = ({ state, dispatch }) => {
     <>
       <InputElem
         placeholder="type your name here..."
-        value={state.username}
-        onChange={(e) =>
-          dispatch({
-            type: Actions.UPDATE_USERNAME,
-            value: (e.target as HTMLInputElement).value,
-          })
-        }
+        value={username}
+        onChange={(e) => setUsername((e.target as HTMLInputElement).value)}
       />
       <GridContainer repeat={3} isColumn>
         {renderDifficultyBtns()}
@@ -95,7 +83,16 @@ const WelcomeScreen: FC<Props> = ({ state, dispatch }) => {
       <BaseButton
         text="Play"
         keyboardKey="P"
-        disabled={!state.username || !state.difficulty}
+        disabled={!username || !difficulty}
+        onClick={() =>
+          dispatch({
+            type: Actions.UPDATE_USER_PREFERENCE,
+            value: {
+              difficulty,
+              username,
+            },
+          })
+        }
       />
       <KeyboardInstructions instructions={instructions} />
     </>

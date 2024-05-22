@@ -3,6 +3,10 @@ import styled from "styled-components";
 import WelcomeScreen from "../views/WelcomeScreen";
 import { Actions } from "../shared/reducerActions";
 import { ReducerAction } from "../shared/interfaces";
+import { useQuery } from "react-query";
+import { fetchCategories } from "../api/api";
+import Categories from "../views/Categories";
+// import Categories from "../views/Categories";
 // import TFQuestion from "../views/TFQuestion";
 
 const DivElem = styled.div`
@@ -28,14 +32,19 @@ const DivElem = styled.div`
   }
 `;
 
-// TODO: FIX REPLACE ANY WITH GameReducerState AND SOLVE ERROR
+// TODO: FIX REPLACE ANY WITH GameReducerState + SOLVE ERROR
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const reducer = (state: any, action: ReducerAction) => {
   switch (action.type) {
-    case Actions.UPDATE_USERNAME:
-      return { ...state, username: action.value };
-    case Actions.UPDATE_DIFFICULTY:
-      return { ...state, difficulty: action.value };
+    case Actions.UPDATE_USER_PREFERENCE:
+      return {
+        ...state,
+        difficulty: action.value?.difficulty,
+        username: action.value?.username,
+      };
+
+    case Actions.UPDATE_SELECTED_CATEGORY:
+      return { ...state, selectedCategory: action.value };
 
     default:
       return { ...state };
@@ -43,25 +52,29 @@ const reducer = (state: any, action: ReducerAction) => {
 };
 
 const GameLayout = () => {
+  const { data: categoryData } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+  });
+
   const [state, dispatch] = useReducer(reducer, {
     username: "",
     difficulty: "",
+    selectedCategory: "",
   });
+
+  const gameStateMachine = () => {
+    if (!state.username || !state.difficulty)
+      return <WelcomeScreen dispatch={dispatch} />;
+
+    if (!state.selectedCategory)
+      return <Categories categories={categoryData} />;
+  };
 
   return (
     <DivElem>
-      <WelcomeScreen
-        state={state}
-        dispatch={dispatch}
-        // userValue={state.username}
-        // onUserChange={(e) =>
-        // dispatch({
-        //   type: Actions.UPDATE_USERNAME,
-        //   value: (e.target as HTMLInputElement).value,
-        // })
-        // }
-      />
-      {/* <Categories /> */}
+      {gameStateMachine()}
+
       {/* <MCQuestion
     question="How many bytes are in a single Kibibyte?"
     correct_answer="1024"

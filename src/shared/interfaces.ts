@@ -12,6 +12,10 @@ export interface StyledComponent {
 export type QuestionType = "multiple" | "boolean";
 export type QuestionDifficulty = "easy" | "medium" | "hard";
 
+export interface Category {
+  id: number;
+  name: string;
+}
 export interface Question {
   type: QuestionType;
   difficulty: QuestionDifficulty;
@@ -26,7 +30,10 @@ export interface GameReducerState {
   difficulty: string;
 }
 
+export interface ReducerValue {
+  [key: string]: string;
+}
 export interface ReducerAction {
   type: Actions;
-  value?: string;
+  value?: ReducerValue;
 }

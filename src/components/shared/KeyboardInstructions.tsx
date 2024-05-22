@@ -14,7 +14,7 @@ const InstructionContainer = styled.div`
   left: 50px;
 `;
 const GreenSpan = styled.span`
-  color: var(--brand-green-light);
+  color: white;
 `;
 
 const KeyboardInstructions: FC<Props> = ({ instructions }) => {
@@ -28,7 +28,7 @@ const KeyboardInstructions: FC<Props> = ({ instructions }) => {
         return (
           <KeyboardKey
             key={`inner_btn_${index}_${outerIndex}`}
-            styles="margin-right: 1px; color: var(--brand-green-light)"
+            styles="margin-right: 1px; color: white"
           >
             {button}
           </KeyboardKey>

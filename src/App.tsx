@@ -2,6 +2,7 @@ import styled from "styled-components";
 import "./App.css";
 
 import GameLayout from "./layouts/GameLayout";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const MainElem = styled.main`
   height: 100vh;
@@ -13,11 +14,15 @@ const MainElem = styled.main`
   align-items: center;
 `;
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
-    <MainElem>
-      <GameLayout />
-    </MainElem>
+    <QueryClientProvider client={queryClient}>
+      <MainElem>
+        <GameLayout />
+      </MainElem>
+    </QueryClientProvider>
   );
 }
 
