@@ -1,9 +1,9 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import styled from "styled-components";
 import { StyledComponent } from "../../shared/interfaces";
 
 interface Props extends StyledComponent {
-  children: React.ReactElement[];
+  children: JSX.Element[];
   isColumn?: boolean;
   repeat: number | string;
 }

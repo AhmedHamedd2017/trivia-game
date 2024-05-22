@@ -1,8 +1,19 @@
-import { Instruction } from "../shared/interfaces";
+import { FC } from "react";
+import {
+  GameReducerState,
+  Instruction,
+  ReducerAction,
+} from "../shared/interfaces";
 import GridContainer from "../components/containers/GridContainer";
 import KeyboardInstructions from "../components/shared/KeyboardInstructions";
 import styled from "styled-components";
 import BaseButton from "../components/buttons/BaseButton";
+import { Actions } from "../shared/reducerActions";
+
+interface Props {
+  state: GameReducerState;
+  dispatch: React.Dispatch<ReducerAction>;
+}
 
 const InputElem = styled.input`
   background: transparent;
@@ -40,16 +51,52 @@ const instructions: Instruction[] = [
   },
 ];
 
-const WelcomeScreen = () => {
+const options = [
+  { label: "Easy", value: "easy" },
+  { label: "Medium", value: "medium" },
+  { label: "Hard", value: "hard" },
+];
+
+const WelcomeScreen: FC<Props> = ({ state, dispatch }) => {
+  const renderDifficultyBtns = (): JSX.Element[] => {
+    return options.map(({ label, value }, index) => {
+      return (
+        <BaseButton
+          key={`${value}_${index}`}
+          text={label}
+          keyboardKey={label.charAt(0)}
+          isSelected={state.difficulty === value}
+          onClick={() =>
+            dispatch({
+              type: Actions.UPDATE_DIFFICULTY,
+              value,
+            })
+          }
+        />
+      );
+    });
+  };
+
   return (
     <>
-      <InputElem placeholder="type your name here..." />
+      <InputElem
+        placeholder="type your name here..."
+        value={state.username}
+        onChange={(e) =>
+          dispatch({
+            type: Actions.UPDATE_USERNAME,
+            value: (e.target as HTMLInputElement).value,
+          })
+        }
+      />
       <GridContainer repeat={3} isColumn>
-        <BaseButton text="Easy" keyboardKey="E" />
-        <BaseButton text="Medium" keyboardKey="M" />
-        <BaseButton text="Hard" keyboardKey="H" />
+        {renderDifficultyBtns()}
       </GridContainer>
-      <BaseButton text="Play" keyboardKey="P" />
+      <BaseButton
+        text="Play"
+        keyboardKey="P"
+        disabled={!state.username || !state.difficulty}
+      />
       <KeyboardInstructions instructions={instructions} />
     </>
   );

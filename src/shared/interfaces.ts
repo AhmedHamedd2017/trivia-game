@@ -1,3 +1,5 @@
+import { Actions } from "./reducerActions";
+
 export interface Instruction {
   buttons: (string | React.ReactElement)[];
   description: string;
@@ -17,4 +19,14 @@ export interface Question {
   question: string;
   correct_answer: string;
   incorrect_answers: string[];
+}
+
+export interface GameReducerState {
+  username: string;
+  difficulty: string;
+}
+
+export interface ReducerAction {
+  type: Actions;
+  value?: string;
 }
