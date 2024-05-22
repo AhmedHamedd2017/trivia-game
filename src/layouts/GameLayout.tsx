@@ -41,10 +41,17 @@ const reducer = (state: any, action: ReducerAction) => {
         ...state,
         difficulty: action.value?.difficulty,
         username: action.value?.username,
+        showCategorySelection: true,
       };
 
     case Actions.UPDATE_SELECTED_CATEGORY:
-      return { ...state, selectedCategory: action.value };
+      return {
+        ...state,
+        selectedCategories: state.selectedCategories.push(
+          action.value?.selectedCategory
+        ),
+        showCategorySelection: false,
+      };
 
     default:
       return { ...state };
@@ -60,15 +67,16 @@ const GameLayout = () => {
   const [state, dispatch] = useReducer(reducer, {
     username: "",
     difficulty: "",
-    selectedCategory: "",
+    showCategorySelection: false,
+    selectedCategories: [],
   });
 
   const gameStateMachine = () => {
     if (!state.username || !state.difficulty)
       return <WelcomeScreen dispatch={dispatch} />;
 
-    if (!state.selectedCategory)
-      return <Categories categories={categoryData} />;
+    if (state.showCategorySelection)
+      return <Categories categories={categoryData} dispatch={dispatch} />;
   };
 
   return (

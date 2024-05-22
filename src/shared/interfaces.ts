@@ -31,7 +31,7 @@ export interface GameReducerState {
 }
 
 export interface ReducerValue {
-  [key: string]: string;
+  [key: string]: string | number;
 }
 export interface ReducerAction {
   type: Actions;
