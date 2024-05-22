@@ -1,0 +1,22 @@
+:root {
+  --background-color: #f2f3f7;
+  --brand-green: #00dfac;
+  --brand-green-light: #0eedb9;
+  --brand-blue: #1a215e;
+  --brand-blue-light: #2a3384;
+  --brand-yellow: #ffd860;
+  --text-primary: #18181b;
+  --text-secondary: #71717a;
+  --brand-red: #ff2929;
+  --background-gradient: linear-gradient(
+    163.34deg,
+    #131339 11.49%,
+    #00ac97 125.44%
+  );
+  --card-shadow: 0px 0px 27.5615px hsla(0, 0%, 62%, 0.08);
+  --card-shadow-2: 0px 0px 34.7336px hsla(0, 0%, 62%, 0.08);
+}
+
+body {
+  margin: 0;
+}
