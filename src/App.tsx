@@ -2,7 +2,8 @@ import styled from "styled-components";
 import "./App.css";
 // import WelcomeScreen from "./views/WelcomeScreen";
 // import Categories from "./views/Categories";
-import MCQuestion from "./views/MCQuestion";
+// import MCQuestion from "./views/MCQuestion";
+import TFQuestion from "./views/TFQuestion";
 
 const MainElem = styled.main`
   height: 100vh;
@@ -43,10 +44,15 @@ function App() {
       <DivElem>
         {/* <WelcomeScreen /> */}
         {/* <Categories /> */}
-        <MCQuestion
+        {/* <MCQuestion
           question="How many bytes are in a single Kibibyte?"
           correct_answer="1024"
           incorrect_answers={["2400", "1000", "1240"]}
+        /> */}
+        <TFQuestion
+          question="How many bytes are in a single Kibibyte?"
+          correct_answer="True"
+          incorrect_answers={["False"]}
         />
       </DivElem>
     </MainElem>
