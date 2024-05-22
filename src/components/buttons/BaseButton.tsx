@@ -1,7 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
 import KeyboardKey from "../shared/KeyboardKey";
-import { StyledComponent } from "../../models/interfaces";
+import { StyledComponent } from "../../shared/interfaces";
 
 const ButtonElem = styled.button<{
   $backgroundColor: string;

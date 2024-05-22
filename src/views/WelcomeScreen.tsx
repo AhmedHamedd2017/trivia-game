@@ -1,4 +1,4 @@
-import { Instruction } from "../models/interfaces";
+import { Instruction } from "../shared/interfaces";
 import GridContainer from "../components/containers/GridContainer";
 import KeyboardInstructions from "../components/shared/KeyboardInstructions";
 import styled from "styled-components";

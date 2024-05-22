@@ -1,8 +1,8 @@
-import GridContainer from "../containers/GridContainer";
 import React, { FC } from "react";
 import KeyboardKey from "./KeyboardKey";
-import { Instruction } from "../../models/interfaces";
+import { Instruction } from "../../shared/interfaces";
 import styled from "styled-components";
+import FlexContainer from "../containers/FlexContainer";
 
 interface Props {
   instructions: Instruction[];
@@ -39,7 +39,7 @@ const KeyboardInstructions: FC<Props> = ({ instructions }) => {
     return instructions.map((instruction, index) => {
       // Index should not be used as a key, just for demo purposes
       return (
-        <span key={`outter_btn_${index}`}>
+        <span style={{ maxWidth: "max-content" }} key={`outter_btn_${index}`}>
           {renderInstructionButtons(instruction.buttons, index)}
           <GreenSpan>{instruction.description}</GreenSpan>
         </span>
@@ -49,9 +49,7 @@ const KeyboardInstructions: FC<Props> = ({ instructions }) => {
 
   return (
     <InstructionContainer>
-      <GridContainer isColumn={true} repeat={instructions.length}>
-        {renderIntrusctions()}
-      </GridContainer>
+      <FlexContainer>{renderIntrusctions()}</FlexContainer>
     </InstructionContainer>
   );
 };

@@ -1,12 +1,8 @@
-import styled from "styled-components";
 import BaseButton from "../components/buttons/BaseButton";
 import GridContainer from "../components/containers/GridContainer";
+import { H1Elem } from "../shared/styledComponents";
 // import KeyboardInstructions from "../components/shared/KeyboardInstructions";
 // import { Instruction } from "../models/interfaces";
-
-const H1Elem = styled.h1`
-  color: white;
-`;
 
 const categories = {
   trivia_categories: [

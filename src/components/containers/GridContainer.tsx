@@ -1,7 +1,8 @@
 import React, { FC } from "react";
 import styled from "styled-components";
+import { StyledComponent } from "../../shared/interfaces";
 
-interface Props {
+interface Props extends StyledComponent {
   children: React.ReactElement[];
   isColumn?: boolean;
   repeat: number | string;
@@ -10,6 +11,7 @@ interface Props {
 const GridContainerElem = styled.div<{
   $isColumn?: boolean;
   $repeat: number | string;
+  $styles?: string;
 }>`
 display: grid;
 grid-template-${(props) => (props.$isColumn ? "columns" : "rows")}: repeat(${(
@@ -18,11 +20,16 @@ grid-template-${(props) => (props.$isColumn ? "columns" : "rows")}: repeat(${(
 column-gap: 30px;
 row-gap: 30px;
 grid-auto-rows: 1fr;
+${(props) => props.$styles || ""}
 `;
 
-const GridContainer: FC<Props> = ({ children, isColumn, repeat }) => {
+const GridContainer: FC<Props> = ({ children, isColumn, repeat, ...props }) => {
   return (
-    <GridContainerElem $isColumn={isColumn} $repeat={repeat}>
+    <GridContainerElem
+      $isColumn={isColumn}
+      $repeat={repeat}
+      $styles={props.styles}
+    >
       {children}
     </GridContainerElem>
   );
