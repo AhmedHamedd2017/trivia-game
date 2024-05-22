@@ -6,8 +6,8 @@ import { ReducerAction } from "../shared/interfaces";
 import { useQuery } from "react-query";
 import { fetchCategories, fetchQuestions } from "../api/api";
 import Categories from "../views/Categories";
-// import Categories from "../views/Categories";
-// import TFQuestion from "../views/TFQuestion";
+import QuestionsLayout from "./QuestionsLayout";
+import Loader from "../components/shared/Loader";
 
 const CATEGORY_AMOUNT = 3;
 const QUESTIONS_AMOUNT = 3;
@@ -74,7 +74,7 @@ const GameLayout = () => {
     queryFn: fetchCategories,
   });
 
-  const { data: questionsData } = useQuery({
+  const { data: questionsData, isLoading: isQuestionsLoading } = useQuery({
     queryKey: ["questions"],
     queryFn: () =>
       fetchQuestions(
@@ -88,6 +88,8 @@ const GameLayout = () => {
   });
 
   const gameStateMachine = () => {
+    if (isQuestionsLoading) return <Loader />;
+
     if (!state.username || !state.difficulty)
       return <WelcomeScreen dispatch={dispatch} />;
 
@@ -96,24 +98,15 @@ const GameLayout = () => {
       state.showCategorySelection < CATEGORY_AMOUNT
     )
       return <Categories categories={categoryData} dispatch={dispatch} />;
+
+    if (
+      questionsData?.results?.length &&
+      state.showCategorySelection < CATEGORY_AMOUNT
+    )
+      return <QuestionsLayout questions={questionsData.results} />;
   };
 
-  return (
-    <DivElem>
-      {gameStateMachine()}
-
-      {/* <MCQuestion
-    question="How many bytes are in a single Kibibyte?"
-    correct_answer="1024"
-    incorrect_answers={["2400", "1000", "1240"]}
-  /> */}
-      {/* <TFQuestion
-        question="How many bytes are in a single Kibibyte?"
-        correct_answer="True"
-        incorrect_answers={["False"]}
-      /> */}
-    </DivElem>
-  );
+  return <DivElem>{gameStateMachine()}</DivElem>;
 };
 
 export default GameLayout;
