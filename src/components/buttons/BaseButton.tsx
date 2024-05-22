@@ -1,8 +1,13 @@
 import { FC } from "react";
 import styled from "styled-components";
 import KeyboardKey from "../shared/KeyboardKey";
+import { StyledComponent } from "../../models/interfaces";
 
-const ButtonElem = styled.button<{ $backgroundColor: string; $color: string }>`
+const ButtonElem = styled.button<{
+  $backgroundColor: string;
+  $color: string;
+  $styles?: string;
+}>`
   background-color: ${(props) => props.$backgroundColor};
   color: ${(props) => props.$color};
   border: none;
@@ -20,27 +25,34 @@ const ButtonElem = styled.button<{ $backgroundColor: string; $color: string }>`
   &:hover {
     opacity: 80%;
   }
+
+  ${(props) => props.$styles || ""}
 `;
 
-interface Props {
+interface Props extends StyledComponent {
   text: string;
   backgroundColor?: string;
   color?: string;
   keyboardKey?: React.ReactElement | string;
 }
 
-const Button: FC<Props> = ({
+const BaseButton: FC<Props> = ({
   text,
   backgroundColor = "var(--brand-green)",
   color = "var(--brand-blue)",
   keyboardKey,
+  ...props
 }) => {
   return (
-    <ButtonElem $backgroundColor={backgroundColor} $color={color}>
+    <ButtonElem
+      $backgroundColor={backgroundColor}
+      $color={color}
+      $styles={props.styles}
+    >
       {keyboardKey && <KeyboardKey>{keyboardKey}</KeyboardKey>}
       {text}
     </ButtonElem>
   );
 };
 
-export default Button;
+export default BaseButton;

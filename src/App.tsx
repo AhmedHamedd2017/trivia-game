@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import "./App.css";
-import WelcomeScreen from "./views/WelcomeScreen";
+// import WelcomeScreen from "./views/WelcomeScreen";
+import Categories from "./views/Categories";
 
 const MainElem = styled.main`
   height: 100vh;
@@ -20,9 +21,12 @@ const DivElem = styled.div`
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: safe center;
+  align-items: safe center;
   gap: 75px;
+
+  overflow: auto;
+  padding: 25px 50px;
 
   position: relative;
 
@@ -36,7 +40,8 @@ function App() {
   return (
     <MainElem>
       <DivElem>
-        <WelcomeScreen />
+        {/* <WelcomeScreen /> */}
+        <Categories />
       </DivElem>
     </MainElem>
   );

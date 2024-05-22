@@ -15,8 +15,9 @@ display: grid;
 grid-template-${(props) => (props.$isColumn ? "columns" : "rows")}: repeat(${(
   props
 ) => props.$repeat}, minmax(0, 1fr));
-column-gap: 10px;
-row-gap: 10px;
+column-gap: 30px;
+row-gap: 30px;
+grid-auto-rows: 1fr;
 `;
 
 const GridContainer: FC<Props> = ({ children, isColumn, repeat }) => {
