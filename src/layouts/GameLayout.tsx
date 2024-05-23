@@ -59,7 +59,8 @@ const reducer = (state: any, action: ReducerAction) => {
       return {
         ...state,
         showCategorySelection:
-          (state.answers.length + 1) % QUESTIONS_AMOUNT === 0,
+          (state.answers.length + 1) % QUESTIONS_AMOUNT === 0 &&
+          state.answers.length + 1 < QUESTIONS_AMOUNT * CATEGORY_AMOUNT,
         answers: [...state.answers, action.value?.answer],
       };
 
@@ -121,7 +122,7 @@ const GameLayout = () => {
 
     if (
       state.showCategorySelection &&
-      state.showCategorySelection < CATEGORY_AMOUNT
+      state.selectedCategories.length < CATEGORY_AMOUNT
     )
       return (
         <Categories
@@ -133,7 +134,7 @@ const GameLayout = () => {
 
     if (
       questionsData?.results?.length &&
-      state.showCategorySelection < CATEGORY_AMOUNT
+      state.answers.length < QUESTIONS_AMOUNT * CATEGORY_AMOUNT
     )
       return (
         <QuestionsLayout
@@ -141,6 +142,8 @@ const GameLayout = () => {
           dispatch={dispatch}
         />
       );
+
+    return <h1>Score Page</h1>;
   };
 
   return <DivElem>{gameStateMachine()}</DivElem>;
