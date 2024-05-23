@@ -3,8 +3,7 @@ import { H1Elem } from "../shared/styledComponents";
 import { decodeHtmlText, shuffle } from "../utils/helpers";
 import BaseButton from "../components/buttons/BaseButton";
 import GridContainer from "../components/containers/GridContainer";
-import KeyboardInstructions from "../components/shared/KeyboardInstructions";
-import { Answer, Instruction } from "../shared/interfaces";
+import { Answer } from "../shared/interfaces";
 import { QuestionDifficulty, QuestionType } from "../shared/types";
 import FlexContainer from "../components/containers/FlexContainer";
 import CountdownTimer from "../components/timers/CountdownTimer";
@@ -40,21 +39,6 @@ const QuestionView: FC<Props> = ({
   const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<string>("");
   const [time, setTime] = useState(-1);
-
-  const instructions: Instruction[] = [
-    {
-      buttons: ["S"],
-      description: "kip",
-    },
-    {
-      buttons: ["N"],
-      description: "ext",
-    },
-    {
-      buttons: type === "multiple" ? ["1", "2", "3", "4"] : ["T", "F"],
-      description: "Answer",
-    },
-  ];
 
   useEffect(() => {
     if (!time) {
@@ -141,7 +125,6 @@ const QuestionView: FC<Props> = ({
           onClick={() => submitHandler()}
         />
       </FlexContainer>
-      <KeyboardInstructions instructions={instructions} />
     </>
   );
 };

@@ -1,6 +1,5 @@
 import { FC } from "react";
 import styled from "styled-components";
-import KeyboardKey from "../shared/KeyboardKey";
 import { StyledComponent } from "../../shared/interfaces";
 
 const ButtonElem = styled.button<{
@@ -57,7 +56,7 @@ const BaseButton: FC<Props> = ({
   text,
   backgroundColor = "var(--brand-green)",
   color = "var(--brand-blue)",
-  keyboardKey,
+  // keyboardKey,
   isSelected,
   ...props
 }) => {
@@ -70,7 +69,7 @@ const BaseButton: FC<Props> = ({
       $disabled={props.disabled}
       onClick={props.onClick}
     >
-      {keyboardKey && <KeyboardKey>{keyboardKey}</KeyboardKey>}
+      {/* {keyboardKey && <KeyboardKey>{keyboardKey}</KeyboardKey>} */}
       {text}
     </ButtonElem>
   );

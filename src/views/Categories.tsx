@@ -5,27 +5,6 @@ import { Category, ReducerAction } from "../shared/interfaces";
 import { H1Elem } from "../shared/styledComponents";
 import { Actions } from "../shared/enums";
 import FlexContainer from "../components/containers/FlexContainer";
-// import KeyboardInstructions from "../components/shared/KeyboardInstructions";
-// import { Instruction } from "../models/interfaces";
-
-// const instructions: Instruction[] = [
-//   {
-//     buttons: ["E"],
-//     description: "asy",
-//   },
-//   {
-//     buttons: ["M"],
-//     description: "edium",
-//   },
-//   {
-//     buttons: ["H"],
-//     description: "ard",
-//   },
-//   {
-//     buttons: ["P"],
-//     description: "lay",
-//   },
-// ];
 
 interface Props {
   dispatch: React.Dispatch<ReducerAction>;
@@ -83,7 +62,6 @@ const Categories: FC<Props> = ({
           }
         />
       </FlexContainer>
-      {/* <KeyboardInstructions instructions={instructions} /> */}
     </>
   );
 };
