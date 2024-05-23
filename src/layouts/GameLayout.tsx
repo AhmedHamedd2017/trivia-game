@@ -111,7 +111,13 @@ const GameLayout = () => {
       state.showCategorySelection &&
       state.showCategorySelection < CATEGORY_AMOUNT
     )
-      return <Categories categories={categoryData} dispatch={dispatch} />;
+      return (
+        <Categories
+          categories={categoryData}
+          dispatch={dispatch}
+          previouslySelectedCategories={state.selectedCategories}
+        />
+      );
 
     if (
       questionsData?.results?.length &&

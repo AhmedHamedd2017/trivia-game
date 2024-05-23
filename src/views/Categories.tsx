@@ -28,12 +28,17 @@ import { Actions } from "../shared/enums";
 
 interface Props {
   dispatch: React.Dispatch<ReducerAction>;
+  previouslySelectedCategories: number[];
   categories: {
     trivia_categories: Category[];
   };
 }
 
-const Categories: FC<Props> = ({ categories, dispatch }) => {
+const Categories: FC<Props> = ({
+  categories,
+  dispatch,
+  previouslySelectedCategories,
+}) => {
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
 
   const renderCategories = () => {
@@ -42,6 +47,7 @@ const Categories: FC<Props> = ({ categories, dispatch }) => {
         <BaseButton
           text={category.name}
           key={category.id}
+          disabled={previouslySelectedCategories.includes(category.id)}
           onClick={() => setSelectedCategory(category.id)}
           isSelected={category.id === selectedCategory}
         />
