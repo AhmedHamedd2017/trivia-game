@@ -3,7 +3,7 @@ import BaseButton from "../components/buttons/BaseButton";
 import GridContainer from "../components/containers/GridContainer";
 import { Category, ReducerAction } from "../shared/interfaces";
 import { H1Elem } from "../shared/styledComponents";
-import { Actions } from "../shared/reducerActions";
+import { Actions } from "../shared/enums";
 // import KeyboardInstructions from "../components/shared/KeyboardInstructions";
 // import { Instruction } from "../models/interfaces";
 

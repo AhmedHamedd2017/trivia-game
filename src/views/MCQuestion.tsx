@@ -5,12 +5,13 @@ import BaseButton from "../components/buttons/BaseButton";
 import GridContainer from "../components/containers/GridContainer";
 import styled from "styled-components";
 import KeyboardInstructions from "../components/shared/KeyboardInstructions";
-import { Instruction } from "../shared/interfaces";
+import { Answer, Instruction } from "../shared/interfaces";
 
 interface Props {
   question: string;
   correct_answer: string;
   incorrect_answers: string[];
+  submitAnswer: (arg0: Answer) => void;
 }
 
 const FlexContainer = styled.div`
@@ -37,12 +38,14 @@ const MCQuestion: FC<Props> = ({
   question,
   correct_answer,
   incorrect_answers,
+  submitAnswer,
 }) => {
   const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
+  const [selectedAnswer, setSelectedAnswer] = useState<string>("");
 
   useEffect(() => {
     setShuffledAnswers(shuffle([correct_answer, ...incorrect_answers]));
-  }, []);
+  }, [correct_answer, incorrect_answers]);
 
   const renderAnswers = () => {
     return shuffledAnswers.map((answer, index) => {
@@ -51,8 +54,23 @@ const MCQuestion: FC<Props> = ({
           text={answer}
           keyboardKey={index.toString()}
           key={`${index}_mcq_answer`}
+          isSelected={answer === selectedAnswer}
+          onClick={() => setSelectedAnswer(answer)}
         />
       );
+    });
+  };
+
+  const getAnswerType = () => {
+    if (selectedAnswer === correct_answer) return "correct";
+    else return "incorrect";
+  };
+
+  const submitHandler = (isSkipped?: boolean) => {
+    setSelectedAnswer("");
+    submitAnswer({
+      type: isSkipped ? "skipped" : getAnswerType(),
+      time: 0,
     });
   };
 
@@ -63,8 +81,17 @@ const MCQuestion: FC<Props> = ({
         {renderAnswers() || []}
       </GridContainer>
       <FlexContainer>
-        <BaseButton text="skip" keyboardKey="S" />
-        <BaseButton text="next" keyboardKey="N" />
+        <BaseButton
+          text="skip"
+          keyboardKey="S"
+          onClick={() => submitHandler(true)}
+        />
+        <BaseButton
+          text="next"
+          keyboardKey="N"
+          disabled={!selectedAnswer}
+          onClick={() => submitHandler()}
+        />
       </FlexContainer>
       <KeyboardInstructions instructions={instructions} />
     </>

@@ -1,4 +1,5 @@
-import { Actions } from "./reducerActions";
+import { Actions } from "./enums";
+import { AnswerType, QuestionDifficulty, QuestionType } from "./types";
 
 export interface Instruction {
   buttons: (string | React.ReactElement)[];
@@ -8,9 +9,6 @@ export interface Instruction {
 export interface StyledComponent {
   styles?: string;
 }
-
-export type QuestionType = "multiple" | "boolean";
-export type QuestionDifficulty = "easy" | "medium" | "hard";
 
 export interface Category {
   id: number;
@@ -31,9 +29,15 @@ export interface GameReducerState {
 }
 
 export interface ReducerValue {
-  [key: string]: string | number;
+  [key: string]: string | number | Answer;
 }
 export interface ReducerAction {
   type: Actions;
   value?: ReducerValue;
+}
+
+export interface Answer {
+  type: AnswerType;
+  time: number;
+  category?: string;
 }

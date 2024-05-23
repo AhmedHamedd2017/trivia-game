@@ -1,16 +1,14 @@
 import { useReducer } from "react";
 import styled from "styled-components";
 import WelcomeScreen from "../views/WelcomeScreen";
-import { Actions } from "../shared/reducerActions";
+import { Actions } from "../shared/enums";
 import { ReducerAction } from "../shared/interfaces";
 import { useQuery } from "react-query";
 import { fetchCategories, fetchQuestions } from "../api/api";
 import Categories from "../views/Categories";
 import QuestionsLayout from "./QuestionsLayout";
 import Loader from "../components/shared/Loader";
-
-const CATEGORY_AMOUNT = 3;
-const QUESTIONS_AMOUNT = 3;
+import { CATEGORY_AMOUNT, QUESTIONS_AMOUNT } from "../shared/constants";
 
 const DivElem = styled.div`
   background: var(--brand-blue);
@@ -57,6 +55,14 @@ const reducer = (state: any, action: ReducerAction) => {
         ],
       };
 
+    case Actions.ADD_ANSWER:
+      return {
+        ...state,
+        showCategorySelection:
+          (state.answers.length + 1) % QUESTIONS_AMOUNT === 0,
+        answers: [...state.answers, action.value?.answer],
+      };
+
     default:
       return { ...state };
   }
@@ -68,10 +74,13 @@ const GameLayout = () => {
     difficulty: "",
     showCategorySelection: false,
     selectedCategories: [],
+    answers: [],
   });
-  const { data: categoryData } = useQuery({
+
+  const { data: categoryData, isLoading: isCategoriesLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 5,
   });
 
   const { data: questionsData, isLoading: isQuestionsLoading } = useQuery({
@@ -85,10 +94,15 @@ const GameLayout = () => {
     enabled: !!(
       state.selectedCategories.length && !state.showCategorySelection
     ),
+    staleTime: 1000 * 60 * 5,
   });
 
   const gameStateMachine = () => {
-    if (isQuestionsLoading) return <Loader />;
+    if (
+      isQuestionsLoading ||
+      (isCategoriesLoading && state.showCategorySelection)
+    )
+      return <Loader />;
 
     if (!state.username || !state.difficulty)
       return <WelcomeScreen dispatch={dispatch} />;
@@ -103,7 +117,12 @@ const GameLayout = () => {
       questionsData?.results?.length &&
       state.showCategorySelection < CATEGORY_AMOUNT
     )
-      return <QuestionsLayout questions={questionsData.results} />;
+      return (
+        <QuestionsLayout
+          questions={questionsData.results}
+          dispatch={dispatch}
+        />
+      );
   };
 
   return <DivElem>{gameStateMachine()}</DivElem>;

@@ -4,7 +4,7 @@ import GridContainer from "../components/containers/GridContainer";
 import KeyboardInstructions from "../components/shared/KeyboardInstructions";
 import styled from "styled-components";
 import BaseButton from "../components/buttons/BaseButton";
-import { Actions } from "../shared/reducerActions";
+import { Actions } from "../shared/enums";
 
 interface Props {
   dispatch: React.Dispatch<ReducerAction>;

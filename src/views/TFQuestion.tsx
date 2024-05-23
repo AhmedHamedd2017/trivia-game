@@ -1,15 +1,16 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { H1Elem } from "../shared/styledComponents";
 import GridContainer from "../components/containers/GridContainer";
 import FlexContainer from "../components/containers/FlexContainer";
 import BaseButton from "../components/buttons/BaseButton";
 import KeyboardInstructions from "../components/shared/KeyboardInstructions";
-import { Instruction } from "../shared/interfaces";
+import { Answer, Instruction } from "../shared/interfaces";
 
 interface Props {
   question: string;
   correct_answer: string;
   incorrect_answers: string[];
+  submitAnswer: (arg0: Answer) => void;
 }
 
 const instructions: Instruction[] = [
@@ -27,11 +28,15 @@ const instructions: Instruction[] = [
   },
 ];
 
+//TODO: REFCATOR MCQ AND TFQ TO A SINGLE COMPONENT
 const TFQuestion: FC<Props> = ({
   question,
   correct_answer,
   incorrect_answers,
+  submitAnswer,
 }) => {
+  const [selectedAnswer, setSelectedAnswer] = useState<string>("");
+
   const renderAnswers = () => {
     const sortedAnswers = [correct_answer, ...incorrect_answers]
       .sort()
@@ -43,8 +48,23 @@ const TFQuestion: FC<Props> = ({
           text={answer}
           keyboardKey={answer.charAt(0)}
           key={`${index}_tfq_answer`}
+          isSelected={answer === selectedAnswer}
+          onClick={() => setSelectedAnswer(answer)}
         />
       );
+    });
+  };
+
+  const getAnswerType = () => {
+    if (selectedAnswer === correct_answer) return "correct";
+    else return "incorrect";
+  };
+
+  const submitHandler = (isSkipped?: boolean) => {
+    setSelectedAnswer("");
+    submitAnswer({
+      type: isSkipped ? "skipped" : getAnswerType(),
+      time: 0,
     });
   };
 
@@ -55,8 +75,17 @@ const TFQuestion: FC<Props> = ({
         {renderAnswers() || []}
       </GridContainer>
       <FlexContainer>
-        <BaseButton text="skip" keyboardKey="S" />
-        <BaseButton text="next" keyboardKey="N" />
+        <BaseButton
+          text="skip"
+          keyboardKey="S"
+          onClick={() => submitHandler(true)}
+        />
+        <BaseButton
+          text="next"
+          keyboardKey="N"
+          disabled={!selectedAnswer}
+          onClick={() => submitHandler()}
+        />
       </FlexContainer>
       <KeyboardInstructions instructions={instructions} />
     </>
