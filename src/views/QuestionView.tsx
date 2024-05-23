@@ -1,12 +1,13 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useLayoutEffect, useEffect, useState } from "react";
 import { H1Elem } from "../shared/styledComponents";
 import { decodeHtmlText, shuffle } from "../utils/helpers";
 import BaseButton from "../components/buttons/BaseButton";
 import GridContainer from "../components/containers/GridContainer";
 import KeyboardInstructions from "../components/shared/KeyboardInstructions";
 import { Answer, Instruction } from "../shared/interfaces";
-import { QuestionType } from "../shared/types";
+import { QuestionDifficulty, QuestionType } from "../shared/types";
 import FlexContainer from "../components/containers/FlexContainer";
+import CountdownTimer from "../components/timers/CountdownTimer";
 
 interface Props {
   question: string;
@@ -14,7 +15,19 @@ interface Props {
   incorrect_answers: string[];
   submitAnswer: (arg0: Answer) => void;
   type: QuestionType;
+  difficulty: QuestionDifficulty;
 }
+
+const getCountdownInitialValue = (difficulty: QuestionDifficulty) => {
+  switch (difficulty) {
+    case "easy":
+      return 90;
+    case "medium":
+      return 60;
+    case "hard":
+      return 30;
+  }
+};
 
 const QuestionView: FC<Props> = ({
   question,
@@ -22,9 +35,11 @@ const QuestionView: FC<Props> = ({
   incorrect_answers,
   submitAnswer,
   type,
+  difficulty,
 }) => {
   const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<string>("");
+  const [time, setTime] = useState(-1);
 
   const instructions: Instruction[] = [
     {
@@ -42,9 +57,17 @@ const QuestionView: FC<Props> = ({
   ];
 
   useEffect(() => {
+    if (!time) {
+      submitHandler(true);
+    }
+  }, [time]);
+
+  useLayoutEffect(() => {
+    setTime(getCountdownInitialValue(difficulty));
+
     if (type === "multiple")
       setShuffledAnswers(shuffle([correct_answer, ...incorrect_answers]));
-  }, [correct_answer, incorrect_answers, type]);
+  }, [correct_answer, incorrect_answers, type, difficulty]);
 
   const renderMCAnswers = () => {
     return shuffledAnswers.map((answer, index) => {
@@ -85,16 +108,23 @@ const QuestionView: FC<Props> = ({
   };
 
   const submitHandler = (isSkipped?: boolean) => {
+    const countdownInitialValue = getCountdownInitialValue(difficulty);
     setSelectedAnswer("");
     submitAnswer({
       type: isSkipped ? "skipped" : getAnswerType(),
-      time: 0,
+      time: countdownInitialValue - time,
     });
   };
 
   return (
     <>
-      <H1Elem>{decodeHtmlText(question)}</H1Elem>
+      <FlexContainer
+        direction="column"
+        styles="justify-content: center; align-items: center; gap: 0;"
+      >
+        <CountdownTimer time={time} setTime={setTime} />
+        <H1Elem>{decodeHtmlText(question)}</H1Elem>
+      </FlexContainer>
       <GridContainer repeat={2} isColumn={true}>
         {type === "multiple" ? renderMCAnswers() : renderTFAnswers() || []}
       </GridContainer>

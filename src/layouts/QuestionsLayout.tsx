@@ -27,7 +27,7 @@ const QuestionsLayout: FC<Props> = ({ questions, dispatch }) => {
 
   const renderQuestions = () => {
     if (currentQuestionIndex < QUESTIONS_AMOUNT) {
-      const { type, question, correct_answer, incorrect_answers } =
+      const { type, question, correct_answer, incorrect_answers, difficulty } =
         questions[currentQuestionIndex];
 
       return (
@@ -37,6 +37,7 @@ const QuestionsLayout: FC<Props> = ({ questions, dispatch }) => {
           incorrect_answers={incorrect_answers}
           submitAnswer={submitAnswer}
           type={type}
+          difficulty={difficulty}
         />
       );
     }

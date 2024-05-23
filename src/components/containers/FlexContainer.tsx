@@ -5,6 +5,7 @@ import styled from "styled-components";
 interface Props extends StyledComponent {
   children: React.ReactElement[];
   direction?: string;
+  styles?: string;
 }
 
 const FlexContainerElem = styled.div<{
@@ -12,14 +13,18 @@ const FlexContainerElem = styled.div<{
   $styles?: string;
 }>`
   display: flex;
-  ${(props) => (props.$direction ? `flex-direction: ${props.$direction}` : "")}
+  ${(props) => (props.$direction ? `flex-direction: ${props.$direction};` : "")}
   gap: 15px;
 
   ${(props) => props.$styles || ""}
 `;
 
-const FlexContainer: FC<Props> = ({ children }) => {
-  return <FlexContainerElem>{children}</FlexContainerElem>;
+const FlexContainer: FC<Props> = ({ children, direction, styles }) => {
+  return (
+    <FlexContainerElem $direction={direction} $styles={styles}>
+      {children}
+    </FlexContainerElem>
+  );
 };
 
 export default FlexContainer;
