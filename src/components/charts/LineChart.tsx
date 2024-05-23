@@ -11,7 +11,7 @@ const LineChart: FC<Props> = ({ seriesData }) => {
       options={{}}
       series={[
         {
-          name: "answer",
+          name: "Time",
           data: seriesData,
         },
       ]}

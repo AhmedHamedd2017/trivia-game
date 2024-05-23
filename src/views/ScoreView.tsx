@@ -22,6 +22,18 @@ const ScoreContaier = styled.div`
   background-color: var(--background-color);
   padding: 10px;
   border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+`;
+
+const TimeHeader = styled.h2`
+  color: var(--brand-blue);
+  text-transform: uppercase;
+  margin: 0;
 `;
 
 const ScoreView: FC<Props> = ({ username, answers }) => {
@@ -86,9 +98,10 @@ const ScoreView: FC<Props> = ({ username, answers }) => {
     <>
       <UsernameElem>Congratulations {username}, you made it! 🎉</UsernameElem>
       <GridContainer isColumn={true} repeat={2}>
-        <ScoreContaier>{`You finished in ${getFormattedCountdown(
-          getTotalTime()
-        )}`}</ScoreContaier>
+        <ScoreContaier>
+          <TimeHeader>You finished in 🔥</TimeHeader>
+          <TimeHeader>{getFormattedCountdown(getTotalTime())}</TimeHeader>
+        </ScoreContaier>
         <ScoreContaier>
           <PieChart {...getPieChartData()} />
         </ScoreContaier>
