@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 import styled from "styled-components";
 import WelcomeScreen from "../views/WelcomeScreen";
 import { Actions } from "../shared/enums";
@@ -83,7 +83,12 @@ const GameLayout = () => {
     staleTime: 1000 * 60 * 5,
   });
 
-  const { data: questionsData, isLoading: isQuestionsLoading } = useQuery({
+  const {
+    data: questionsData,
+    isLoading: isQuestionsLoading,
+    isFetching: isQuestionsFetching,
+    refetch: refetchQuestions,
+  } = useQuery({
     queryKey: ["questions"],
     queryFn: () =>
       fetchQuestions(
@@ -91,15 +96,22 @@ const GameLayout = () => {
         state.selectedCategories[0],
         state.difficulty
       ),
-    enabled: !!(
-      state.selectedCategories.length && !state.showCategorySelection
-    ),
+    enabled: false,
     staleTime: 1000 * 60 * 5,
   });
+
+  useEffect(() => {
+    if (
+      state.selectedCategories.length &&
+      state.selectedCategories.length < CATEGORY_AMOUNT + 1
+    )
+      refetchQuestions();
+  }, [state.selectedCategories, refetchQuestions]);
 
   const gameStateMachine = () => {
     if (
       isQuestionsLoading ||
+      isQuestionsFetching ||
       (isCategoriesLoading && state.showCategorySelection)
     )
       return <Loader />;
