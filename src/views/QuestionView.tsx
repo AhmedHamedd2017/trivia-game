@@ -3,57 +3,74 @@ import { H1Elem } from "../shared/styledComponents";
 import { shuffle } from "../utils/helpers";
 import BaseButton from "../components/buttons/BaseButton";
 import GridContainer from "../components/containers/GridContainer";
-import styled from "styled-components";
 import KeyboardInstructions from "../components/shared/KeyboardInstructions";
 import { Answer, Instruction } from "../shared/interfaces";
+import { QuestionType } from "../shared/types";
+import FlexContainer from "../components/containers/FlexContainer";
 
 interface Props {
   question: string;
   correct_answer: string;
   incorrect_answers: string[];
   submitAnswer: (arg0: Answer) => void;
+  type: QuestionType;
 }
 
-const FlexContainer = styled.div`
-  display: flex;
-  gap: 5px;
-`;
-
-const instructions: Instruction[] = [
-  {
-    buttons: ["S"],
-    description: "kip",
-  },
-  {
-    buttons: ["N"],
-    description: "ext",
-  },
-  {
-    buttons: ["1", "2", "3", "4"],
-    description: "Answer",
-  },
-];
-
-const MCQuestion: FC<Props> = ({
+const QuestionView: FC<Props> = ({
   question,
   correct_answer,
   incorrect_answers,
   submitAnswer,
+  type,
 }) => {
   const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<string>("");
 
-  useEffect(() => {
-    setShuffledAnswers(shuffle([correct_answer, ...incorrect_answers]));
-  }, [correct_answer, incorrect_answers]);
+  const instructions: Instruction[] = [
+    {
+      buttons: ["S"],
+      description: "kip",
+    },
+    {
+      buttons: ["N"],
+      description: "ext",
+    },
+    {
+      buttons: type === "multiple" ? ["1", "2", "3", "4"] : ["T", "F"],
+      description: "Answer",
+    },
+  ];
 
-  const renderAnswers = () => {
+  useEffect(() => {
+    if (type === "multiple")
+      setShuffledAnswers(shuffle([correct_answer, ...incorrect_answers]));
+  }, [correct_answer, incorrect_answers, type]);
+
+  const renderMCAnswers = () => {
     return shuffledAnswers.map((answer, index) => {
       return (
         <BaseButton
           text={answer}
           keyboardKey={index.toString()}
           key={`${index}_mcq_answer`}
+          isSelected={answer === selectedAnswer}
+          onClick={() => setSelectedAnswer(answer)}
+        />
+      );
+    });
+  };
+
+  const renderTFAnswers = () => {
+    const sortedAnswers = [correct_answer, ...incorrect_answers]
+      .sort()
+      .reverse();
+
+    return sortedAnswers.map((answer, index) => {
+      return (
+        <BaseButton
+          text={answer}
+          keyboardKey={answer.charAt(0)}
+          key={`${index}_tfq_answer`}
           isSelected={answer === selectedAnswer}
           onClick={() => setSelectedAnswer(answer)}
         />
@@ -78,7 +95,7 @@ const MCQuestion: FC<Props> = ({
     <>
       <H1Elem>{question}</H1Elem>
       <GridContainer repeat={2} isColumn={true}>
-        {renderAnswers() || []}
+        {type === "multiple" ? renderMCAnswers() : renderTFAnswers() || []}
       </GridContainer>
       <FlexContainer>
         <BaseButton
@@ -98,4 +115,4 @@ const MCQuestion: FC<Props> = ({
   );
 };
 
-export default MCQuestion;
+export default QuestionView;
