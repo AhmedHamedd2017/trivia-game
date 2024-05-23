@@ -4,6 +4,7 @@ import GridContainer from "../components/containers/GridContainer";
 import { Category, ReducerAction } from "../shared/interfaces";
 import { H1Elem } from "../shared/styledComponents";
 import { Actions } from "../shared/enums";
+import FlexContainer from "../components/containers/FlexContainer";
 // import KeyboardInstructions from "../components/shared/KeyboardInstructions";
 // import { Instruction } from "../models/interfaces";
 
@@ -61,16 +62,27 @@ const Categories: FC<Props> = ({
       <GridContainer isColumn={true} repeat={3}>
         {renderCategories()}
       </GridContainer>
-      <BaseButton
-        text="Start"
-        disabled={!selectedCategory}
-        onClick={() =>
-          dispatch({
-            type: Actions.UPDATE_SELECTED_CATEGORY,
-            value: { selectedCategory },
-          })
-        }
-      />
+      <FlexContainer>
+        <BaseButton
+          text="Random"
+          onClick={() =>
+            dispatch({
+              type: Actions.UPDATE_SELECTED_CATEGORY,
+              value: { selectedCategory: -1 },
+            })
+          }
+        />
+        <BaseButton
+          text="Start"
+          disabled={!selectedCategory}
+          onClick={() =>
+            dispatch({
+              type: Actions.UPDATE_SELECTED_CATEGORY,
+              value: { selectedCategory },
+            })
+          }
+        />
+      </FlexContainer>
       {/* <KeyboardInstructions instructions={instructions} /> */}
     </>
   );
