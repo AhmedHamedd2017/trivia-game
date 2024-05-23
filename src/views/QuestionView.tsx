@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { H1Elem } from "../shared/styledComponents";
-import { shuffle } from "../utils/helpers";
+import { decodeHtmlText, shuffle } from "../utils/helpers";
 import BaseButton from "../components/buttons/BaseButton";
 import GridContainer from "../components/containers/GridContainer";
 import KeyboardInstructions from "../components/shared/KeyboardInstructions";
@@ -48,13 +48,14 @@ const QuestionView: FC<Props> = ({
 
   const renderMCAnswers = () => {
     return shuffledAnswers.map((answer, index) => {
+      const decodedAnswer = decodeHtmlText(answer);
       return (
         <BaseButton
-          text={answer}
+          text={decodedAnswer}
           keyboardKey={index.toString()}
           key={`${index}_mcq_answer`}
-          isSelected={answer === selectedAnswer}
-          onClick={() => setSelectedAnswer(answer)}
+          isSelected={decodedAnswer === selectedAnswer}
+          onClick={() => setSelectedAnswer(decodedAnswer)}
         />
       );
     });
@@ -93,7 +94,7 @@ const QuestionView: FC<Props> = ({
 
   return (
     <>
-      <H1Elem>{question}</H1Elem>
+      <H1Elem>{decodeHtmlText(question)}</H1Elem>
       <GridContainer repeat={2} isColumn={true}>
         {type === "multiple" ? renderMCAnswers() : renderTFAnswers() || []}
       </GridContainer>

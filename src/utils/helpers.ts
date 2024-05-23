@@ -15,3 +15,9 @@ export const shuffle = (array: string[]): string[] => {
 
   return arrayCopy;
 };
+
+export const decodeHtmlText = (htmlText: string) => {
+  const divContainer = document.createElement("div");
+  divContainer.innerHTML = htmlText;
+  return divContainer.textContent || divContainer.innerText || "";
+};
