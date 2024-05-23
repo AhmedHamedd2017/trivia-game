@@ -1,5 +1,6 @@
 import { useEffect, FC } from "react";
 import styled from "styled-components";
+import { getFormattedCountdown } from "../../utils/helpers";
 
 interface Props {
   time: number;
@@ -25,13 +26,7 @@ const CountdownTimer: FC<Props> = ({ time, setTime }) => {
     return () => clearInterval(timer);
   }, [setTime]);
 
-  const getFormattedCountdown = () => {
-    return `Time left: ${`${Math.floor(time / 60)}`.padStart(2, "0")}:${`${
-      time % 60
-    }`.padStart(2, "0")}`;
-  };
-
-  return <TimerElem>{getFormattedCountdown()}</TimerElem>;
+  return <TimerElem>{`Time left: ${getFormattedCountdown(time)}`}</TimerElem>;
 };
 
 export default CountdownTimer;

@@ -9,6 +9,7 @@ import Categories from "../views/Categories";
 import QuestionsLayout from "./QuestionsLayout";
 import Loader from "../components/shared/Loader";
 import { CATEGORY_AMOUNT, QUESTIONS_AMOUNT } from "../shared/constants";
+import ScoreView from "../views/ScoreView";
 
 const DivElem = styled.div`
   background: var(--brand-blue);
@@ -143,7 +144,7 @@ const GameLayout = () => {
         />
       );
 
-    return <h1>Score Page</h1>;
+    return <ScoreView username={state.username} answers={state.answers} />;
   };
 
   return <DivElem>{gameStateMachine()}</DivElem>;

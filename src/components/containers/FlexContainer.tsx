@@ -3,7 +3,7 @@ import { StyledComponent } from "../../shared/interfaces";
 import styled from "styled-components";
 
 interface Props extends StyledComponent {
-  children: React.ReactElement[];
+  children: React.ReactElement | React.ReactElement[];
   direction?: string;
   styles?: string;
 }
