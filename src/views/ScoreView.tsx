@@ -6,6 +6,7 @@ import { getFormattedCountdown } from "../utils/helpers";
 import GridContainer from "../components/containers/GridContainer";
 import PieChart from "../components/charts/PieChart";
 import LineChart from "../components/charts/LineChart";
+import StackedBarChart from "../components/charts/StackedBarChart";
 
 interface Props {
   username: string;
@@ -48,6 +49,39 @@ const ScoreView: FC<Props> = ({ username, answers }) => {
     };
   };
 
+  const getStackedBarChartData = () => {
+    const categoriesMap = new Map();
+    const categories: string[] = [];
+    const positiveValues: number[] = [];
+    const negativeValues: number[] = [];
+
+    answers.forEach((answer) => {
+      const { category, type } = answer;
+      const currentCategory = categoriesMap.get(category);
+      const isPositive = type === "correct";
+
+      if (currentCategory) {
+        categoriesMap.set(category, {
+          positiveValues: currentCategory.positiveValues + Number(isPositive),
+          negativeValues: currentCategory.negativeValues + Number(!isPositive),
+        });
+      } else
+        categoriesMap.set(category, {
+          positiveValues: Number(isPositive),
+          negativeValues: Number(!isPositive),
+        });
+    });
+
+    [...categoriesMap.entries()].map(([key, value]) => {
+      categories.push(key);
+      positiveValues.push(value.positiveValues);
+      negativeValues.push(value.negativeValues);
+    });
+
+    return { categories, positiveValues, negativeValues };
+  };
+
+  getStackedBarChartData();
   return (
     <>
       <UsernameElem>Congratulations {username}, you made it! 🎉</UsernameElem>
@@ -57,6 +91,9 @@ const ScoreView: FC<Props> = ({ username, answers }) => {
         )}`}</ScoreContaier>
         <ScoreContaier>
           <PieChart {...getPieChartData()} />
+        </ScoreContaier>
+        <ScoreContaier>
+          <StackedBarChart {...getStackedBarChartData()} />
         </ScoreContaier>
         <ScoreContaier>
           <LineChart seriesData={answers.map((answer) => answer.time)} />
