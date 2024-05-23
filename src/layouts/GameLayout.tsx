@@ -65,6 +65,15 @@ const reducer = (state: any, action: ReducerAction) => {
         answers: [...state.answers, action.value?.answer],
       };
 
+    case Actions.START_NEW_GAME:
+      return {
+        username: "",
+        difficulty: "",
+        showCategorySelection: false,
+        selectedCategories: [],
+        answers: [],
+      };
+
     default:
       return { ...state };
   }
@@ -144,7 +153,14 @@ const GameLayout = () => {
         />
       );
 
-    return <ScoreView username={state.username} answers={state.answers} />;
+    if (state.answers.length === QUESTIONS_AMOUNT * CATEGORY_AMOUNT)
+      return (
+        <ScoreView
+          username={state.username}
+          answers={state.answers}
+          dispatch={dispatch}
+        />
+      );
   };
 
   return <DivElem>{gameStateMachine()}</DivElem>;

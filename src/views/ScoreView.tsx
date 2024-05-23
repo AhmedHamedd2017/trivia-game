@@ -1,16 +1,18 @@
 import { FC } from "react";
 import styled from "styled-components";
 import BaseButton from "../components/buttons/BaseButton";
-import { Answer } from "../shared/interfaces";
+import { Answer, ReducerAction } from "../shared/interfaces";
 import { getFormattedCountdown } from "../utils/helpers";
 import GridContainer from "../components/containers/GridContainer";
 import PieChart from "../components/charts/PieChart";
 import LineChart from "../components/charts/LineChart";
 import StackedBarChart from "../components/charts/StackedBarChart";
+import { Actions } from "../shared/enums";
 
 interface Props {
   username: string;
   answers: Answer[];
+  dispatch: React.Dispatch<ReducerAction>;
 }
 
 const UsernameElem = styled.h1`
@@ -36,7 +38,7 @@ const TimeHeader = styled.h2`
   margin: 0;
 `;
 
-const ScoreView: FC<Props> = ({ username, answers }) => {
+const ScoreView: FC<Props> = ({ username, answers, dispatch }) => {
   const getTotalTime = () => {
     return answers.reduce(
       (accumulator, currentValue) => accumulator + currentValue.time,
@@ -112,7 +114,14 @@ const ScoreView: FC<Props> = ({ username, answers }) => {
           <LineChart seriesData={answers.map((answer) => answer.time)} />
         </ScoreContaier>
       </GridContainer>
-      <BaseButton text="New Game" />
+      <BaseButton
+        text="New Game"
+        onClick={() =>
+          dispatch({
+            type: Actions.START_NEW_GAME,
+          })
+        }
+      />
     </>
   );
 };
