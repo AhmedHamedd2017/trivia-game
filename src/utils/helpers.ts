@@ -38,5 +38,7 @@ export const getErrorQuestionsResponse = (response_code: number) => {
       throw new Error("Token Not Found");
     case 4:
       throw new Error("Token Empty");
+    case 5:
+      throw new Error("Too Many Requests");
   }
 };
