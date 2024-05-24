@@ -24,7 +24,6 @@ const LineChart: FC<Props> = ({ seriesData }) => {
         },
       ]}
       type="line"
-      width="500"
     />
   );
 };

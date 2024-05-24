@@ -15,7 +15,6 @@ const PieChart: FC<Props> = ({ labels, series }) => {
       }}
       series={series}
       type="pie"
-      width="500"
     />
   );
 };

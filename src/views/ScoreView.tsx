@@ -99,7 +99,11 @@ const ScoreView: FC<Props> = ({ username, answers, dispatch }) => {
   return (
     <>
       <UsernameElem>Congratulations {username}, you made it! 🎉</UsernameElem>
-      <GridContainer isColumn={true} repeat={2}>
+      <GridContainer
+        isColumn={true}
+        repeat={2}
+        styles="@media screen and (max-width: 720px) {grid-template-columns: repeat(1, minmax(0, 1fr));} width: 100%"
+      >
         <ScoreContaier>
           <TimeHeader>You finished in 🔥</TimeHeader>
           <TimeHeader>{getFormattedCountdown(getTotalTime())}</TimeHeader>

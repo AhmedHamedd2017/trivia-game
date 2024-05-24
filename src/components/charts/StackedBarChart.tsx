@@ -41,7 +41,7 @@ const StackedBarChart: FC<Props> = ({
         },
       ]}
       type="bar"
-      width="500"
+      height="200%"
     />
   );
 };

@@ -27,6 +27,10 @@ const DivElem = styled.div`
   overflow: auto;
   padding: 25px 50px;
 
+  @media screen and (max-width: 720px) {
+    padding: 25px;
+  }
+
   position: relative;
 
   ::placeholder {

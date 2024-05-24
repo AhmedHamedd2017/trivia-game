@@ -38,7 +38,11 @@ const Categories: FC<Props> = ({
   return (
     <>
       <H1Elem>Questions Category</H1Elem>
-      <GridContainer isColumn={true} repeat={3}>
+      <GridContainer
+        isColumn={true}
+        repeat={3}
+        styles="@media screen and (max-width: 720px) {grid-template-columns: repeat(2, minmax(0, 1fr));}"
+      >
         {renderCategories()}
       </GridContainer>
       <FlexContainer>

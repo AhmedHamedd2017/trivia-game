@@ -23,6 +23,10 @@ const ButtonElem = styled.button<{
   text-decoration: none;
   transition: all 0.2s;
 
+  @media screen and (max-width: 720px) {
+    padding: 18px;
+  }
+
   &:focus {
     outline: 0;
   }
