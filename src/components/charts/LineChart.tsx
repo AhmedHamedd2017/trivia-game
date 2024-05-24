@@ -8,7 +8,15 @@ interface Props {
 const LineChart: FC<Props> = ({ seriesData }) => {
   return (
     <Chart
-      options={{}}
+      options={{
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val + " sec";
+            },
+          },
+        },
+      }}
       series={[
         {
           name: "Time",
