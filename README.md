@@ -1,30 +1,33 @@
-# React + TypeScript + Vite
+# Zeal Pay (Trivia Questions Game)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The following is a trivia game application for the submission to [zeal's assignment](https://zealpay.notion.site/Frontend-ReactJS-Task-8a6bf595bff94f04a6ed5d350d1afe45).
 
-Currently, two official plugins are available:
+## Installation
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+After cloning the repo use the package manager npm to install.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```bash
+npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Commands
+
+run locally
+
+```bash
+npm run dev
+```
+
+build
+
+```bash
+npm run build
+```
+
+## Used Technologies
+
+React, Typescript, TanStack-Query, Apexcharts and Styled Components.
+
+## API
+
+[OpenTrivia API](https://zealpay.notion.site/OpenTrivia-API-3850badd4c8f48878f12a6c44c654436#10df37b9e4e1428981fe30dc349adc13)
