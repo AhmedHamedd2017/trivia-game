@@ -27,3 +27,16 @@ export const getFormattedCountdown = (time: number) => {
     time % 60
   }`.padStart(2, "0")}`;
 };
+
+export const getErrorQuestionsResponse = (response_code: number) => {
+  switch (response_code) {
+    case 1:
+      throw new Error("No Results");
+    case 2:
+      throw new Error("Invalid Parameter");
+    case 3:
+      throw new Error("Token Not Found");
+    case 4:
+      throw new Error("Token Empty");
+  }
+};

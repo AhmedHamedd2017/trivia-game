@@ -41,3 +41,8 @@ export interface Answer {
   time: number;
   category?: string;
 }
+
+export interface QuestionResponseAPI extends Response {
+  response_code: 0 | 1 | 2 | 3 | 4;
+  results?: Array<Question>;
+}

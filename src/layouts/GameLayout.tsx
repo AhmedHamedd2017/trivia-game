@@ -10,6 +10,7 @@ import QuestionsLayout from "./QuestionsLayout";
 import Loader from "../components/shared/Loader";
 import { CATEGORY_AMOUNT, QUESTIONS_AMOUNT } from "../shared/constants";
 import ScoreView from "../views/ScoreView";
+import ErrorView from "../views/ErrorView";
 
 const DivElem = styled.div`
   background: var(--brand-blue);
@@ -88,7 +89,11 @@ const GameLayout = () => {
     answers: [],
   });
 
-  const { data: categoryData, isLoading: isCategoriesLoading } = useQuery({
+  const {
+    data: categoryData,
+    isLoading: isCategoriesLoading,
+    error: categoriesError,
+  } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategories,
     staleTime: 1000 * 60 * 5,
@@ -99,6 +104,7 @@ const GameLayout = () => {
     isLoading: isQuestionsLoading,
     isFetching: isQuestionsFetching,
     refetch: refetchQuestions,
+    error: questionsError,
   } = useQuery({
     queryKey: ["questions"],
     queryFn: () =>
@@ -109,6 +115,7 @@ const GameLayout = () => {
       ),
     enabled: false,
     staleTime: 1000 * 60 * 5,
+    retry: 0,
   });
 
   useEffect(() => {
@@ -120,6 +127,15 @@ const GameLayout = () => {
   }, [state.selectedCategories, refetchQuestions]);
 
   const gameStateMachine = () => {
+    if (questionsError || categoriesError)
+      return (
+        <ErrorView
+          queryKey={questionsError ? "questions" : "categories"}
+          errorMessage={(questionsError || categoriesError) as string}
+          dispatch={dispatch}
+        />
+      );
+
     if (
       isQuestionsLoading ||
       isQuestionsFetching ||
