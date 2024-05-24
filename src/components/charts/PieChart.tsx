@@ -11,6 +11,7 @@ const PieChart: FC<Props> = ({ labels, series }) => {
     <Chart
       options={{
         labels: labels,
+        colors: ["#00dfac", "#ff2929", "#ffd860"],
       }}
       series={series}
       type="pie"

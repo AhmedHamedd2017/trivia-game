@@ -1,5 +1,6 @@
 import { FC } from "react";
 import Chart from "react-apexcharts";
+import { decodeHtmlText } from "../../utils/helpers";
 
 interface Props {
   categories: string[];
@@ -18,8 +19,16 @@ const StackedBarChart: FC<Props> = ({
           stacked: true,
         },
         xaxis: {
-          categories: categories,
+          categories: categories.map((category) => decodeHtmlText(category)),
         },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val + " Answers";
+            },
+          },
+        },
+        colors: ["#ff2929", "#00dfac"],
       }}
       series={[
         {
