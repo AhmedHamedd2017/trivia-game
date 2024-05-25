@@ -25,7 +25,10 @@ export interface Question {
 
 export interface GameReducerState {
   username: string;
-  difficulty: string;
+  difficulty: QuestionDifficulty;
+  showCategorySelection: boolean;
+  selectedCategories: Array<number>;
+  answers: Array<Answer>;
 }
 
 export interface ReducerValue {

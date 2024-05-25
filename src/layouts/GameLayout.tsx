@@ -1,16 +1,21 @@
 import { useReducer, useEffect } from "react";
 import styled from "styled-components";
-import WelcomeScreen from "../views/WelcomeScreen";
-import { Actions } from "../shared/enums";
-import { ReducerAction } from "../shared/interfaces";
 import { useQuery } from "react-query";
-import { fetchCategories, fetchQuestions } from "../api/api";
+
+import WelcomeScreen from "../views/WelcomeScreen";
+import { fetchCategories, fetchQuestions, fetchSession } from "../api/api";
 import Categories from "../views/Categories";
 import QuestionsLayout from "./QuestionsLayout";
 import Loader from "../components/shared/Loader";
-import { CATEGORY_AMOUNT, QUESTIONS_AMOUNT } from "../shared/constants";
+import {
+  CATEGORY_AMOUNT,
+  QUESTIONS_AMOUNT,
+  SESSION_STORAGE_KEY,
+} from "../shared/constants";
 import ScoreView from "../views/ScoreView";
 import ErrorView from "../views/ErrorView";
+import { saveLocalStorageItem } from "../utils/helpers";
+import { gameReducer } from "../reducers/gameReducer";
 
 const DivElem = styled.div`
   background: var(--brand-blue);
@@ -39,58 +44,32 @@ const DivElem = styled.div`
   }
 `;
 
-// TODO: FIX REPLACE ANY WITH GameReducerState + SOLVE ERROR
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const reducer = (state: any, action: ReducerAction) => {
-  switch (action.type) {
-    case Actions.UPDATE_USER_PREFERENCE:
-      return {
-        ...state,
-        difficulty: action.value?.difficulty,
-        username: action.value?.username,
-        showCategorySelection: true,
-      };
-
-    case Actions.UPDATE_SELECTED_CATEGORY:
-      return {
-        ...state,
-        showCategorySelection: false,
-        selectedCategories: [
-          action.value?.selectedCategory,
-          ...state.selectedCategories,
-        ],
-      };
-
-    case Actions.ADD_ANSWER:
-      return {
-        ...state,
-        showCategorySelection:
-          (state.answers.length + 1) % QUESTIONS_AMOUNT === 0 &&
-          state.answers.length + 1 < QUESTIONS_AMOUNT * CATEGORY_AMOUNT,
-        answers: [...state.answers, action.value?.answer],
-      };
-
-    case Actions.START_NEW_GAME:
-      return {
-        username: "",
-        difficulty: "",
-        showCategorySelection: false,
-        selectedCategories: [],
-        answers: [],
-      };
-
-    default:
-      return { ...state };
-  }
-};
-
 const GameLayout = () => {
-  const [state, dispatch] = useReducer(reducer, {
+  const [state, dispatch] = useReducer(gameReducer, {
     username: "",
     difficulty: "",
     showCategorySelection: false,
     selectedCategories: [],
     answers: [],
+  });
+
+  const {
+    data: sessionData,
+    isLoading: isSessionLoading,
+    refetch: refetchSession,
+  } = useQuery({
+    queryKey: ["session"],
+    queryFn: async () => {
+      const response = await fetchSession();
+      saveLocalStorageItem(SESSION_STORAGE_KEY, {
+        token: response,
+        timestamp: Date.now(),
+      });
+      return response;
+    },
+    enabled: false,
+    // 6 hours
+    staleTime: 1000 * 60 * 60 * 6,
   });
 
   const {
@@ -100,6 +79,7 @@ const GameLayout = () => {
   } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategories,
+    // 5 minutes
     staleTime: 1000 * 60 * 5,
   });
 
@@ -110,14 +90,16 @@ const GameLayout = () => {
     refetch: refetchQuestions,
     error: questionsError,
   } = useQuery({
-    queryKey: ["questions"],
+    queryKey: ["questions", sessionData],
     queryFn: () =>
       fetchQuestions(
         QUESTIONS_AMOUNT,
         state.selectedCategories[0],
-        state.difficulty
+        state.difficulty,
+        sessionData
       ),
     enabled: false,
+    // 5 minutes
     staleTime: 1000 * 60 * 5,
   });
 
@@ -142,12 +124,15 @@ const GameLayout = () => {
     if (
       isQuestionsLoading ||
       isQuestionsFetching ||
-      (isCategoriesLoading && state.showCategorySelection)
+      (isCategoriesLoading && state.showCategorySelection) ||
+      (isSessionLoading && state.showCategorySelection)
     )
       return <Loader />;
 
     if (!state.username || !state.difficulty)
-      return <WelcomeScreen dispatch={dispatch} />;
+      return (
+        <WelcomeScreen dispatch={dispatch} refetchSession={refetchSession} />
+      );
 
     if (
       state.showCategorySelection &&

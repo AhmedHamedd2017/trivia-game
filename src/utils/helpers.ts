@@ -16,6 +16,18 @@ export const shuffle = (array: string[]): string[] => {
   return arrayCopy;
 };
 
+export const saveLocalStorageItem = (key: string, value: unknown) => {
+  localStorage.setItem(key, JSON.stringify(value));
+};
+
+export const getLocalStorageItem = (key: string) => {
+  return localStorage.getItem(key);
+};
+
+export const removeLocalStorageItem = (key: string) => {
+  localStorage.removeItem(key);
+};
+
 export const decodeHtmlText = (htmlText: string) => {
   const divContainer = document.createElement("div");
   divContainer.innerHTML = htmlText;
